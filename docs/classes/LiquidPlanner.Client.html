@@ -144,19 +144,19 @@
                                 <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-493248590"></a>
+                                    <a class="accordion-toggle " data-toggle="collapse" data-target="#namespace-1481595731"></a>
                                 <a href="../namespaces/default.html" style="margin-left: 30px; padding-left: 0">\</a>
             </div>
-            <div id="namespace-493248590" class="accordion-body collapse in">
+            <div id="namespace-1481595731" class="accordion-body collapse in">
                 <div class="accordion-inner">
 
                                                     <div class="accordion" style="margin-bottom: 0">
         <div class="accordion-group">
             <div class="accordion-heading">
-                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-67919532"></a>
+                                    <a class="accordion-toggle collapsed" data-toggle="collapse" data-target="#namespace-733841556"></a>
                                 <a href="../namespaces/LiquidPlanner.html" style="margin-left: 30px; padding-left: 0">LiquidPlanner</a>
             </div>
-            <div id="namespace-67919532" class="accordion-body collapse ">
+            <div id="namespace-733841556" class="accordion-body collapse ">
                 <div class="accordion-inner">
 
                     
@@ -430,24 +430,24 @@
             <article class="method">
                 <h3 class="public ">__construct()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">__construct(\LiquidPlanner\type <span class="argument">$workspaceID</span>, \LiquidPlanner\type <span class="argument">$email</span>, \LiquidPlanner\type <span class="argument">$password</span>)</pre>
+                <pre class="signature" style="margin-right: 54px;">__construct(int <span class="argument">$workspaceID</span>, string <span class="argument">$email</span>, string <span class="argument">$password</span>)</pre>
                 <p><em>Constructor</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>int</td>
                                 <td>$workspaceID </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>string</td>
                                 <td>$email </td>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>string</td>
                                 <td>$password </td>
                                 <td></td>
                             </tr>
@@ -634,14 +634,14 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="public ">taskTimesheetEntries()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">taskTimesheetEntries(\LiquidPlanner\type <span class="argument">$taskId</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">taskTimesheetEntries(int <span class="argument">$taskId</span>) : array</pre>
                 <p><em>Reterives timesheet entries for a task</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>int</td>
                                 <td>$taskId </td>
                                 <td></td>
                             </tr>
@@ -826,7 +826,7 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="public ">tasksNoteCreate()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">tasksNoteCreate(array <span class="argument">$data</span>, \LiquidPlanner\type <span class="argument">$taskid</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">tasksNoteCreate(array <span class="argument">$data</span>, int <span class="argument">$taskid</span>) : array</pre>
                 <p><em>Creates a note on a task in Liquid Planner</em></p>
                 
 
@@ -838,7 +838,7 @@ web service is returned so you can examine the result.</p>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>int</td>
                                 <td>$taskid </td>
                                 <td><p>ID of Liquid Planer task to link to comment</p></td>
                             </tr>
@@ -867,7 +867,7 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="public ">tasksLinkCreate()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">tasksLinkCreate(array <span class="argument">$data</span>, \LiquidPlanner\type <span class="argument">$taskid</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">tasksLinkCreate(array <span class="argument">$data</span>, int <span class="argument">$taskid</span>) : array</pre>
                 <p><em>Creates a link on a task in Liquid Planner</em></p>
                 
 
@@ -879,7 +879,7 @@ web service is returned so you can examine the result.</p>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>int</td>
                                 <td>$taskid </td>
                                 <td><p>ID of Liquid Planer task to link to comment</p></td>
                             </tr>
@@ -1340,7 +1340,7 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="private ">post()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">post(string <span class="argument">$url</span>, \LiquidPlanner\type <span class="argument">$encodedTask</span>) : array</pre>
+                <pre class="signature" style="margin-right: 54px;">post(string <span class="argument">$url</span>, string <span class="argument">$encodedTask</span>) : array</pre>
                 <p><em>Send data to the Liquid Planner API as a POST method with a JSON-encoded payload</em></p>
                 
 
@@ -1352,7 +1352,7 @@ web service is returned so you can examine the result.</p>
                                 <td></td>
                             </tr>
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>string</td>
                                 <td>$encodedTask </td>
                                 <td></td>
                             </tr>
@@ -1490,14 +1490,14 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="private ">throttleMessage()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">throttleMessage(\LiquidPlanner\type <span class="argument">$results</span>)</pre>
+                <pre class="signature" style="margin-right: 54px;">throttleMessage(array <span class="argument">$results</span>)</pre>
                 <p><em>Returns the throttle Message</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>array</td>
                                 <td>$results </td>
                                 <td></td>
                             </tr>
@@ -1523,14 +1523,14 @@ web service is returned so you can examine the result.</p>
             <article class="method">
                 <h3 class="private ">getWaitTime()</h3>
                 <a href="#source-view" role="button" class="pull-right btn" data-toggle="modal" style="font-size: 1.1em; padding: 9px 14px"><i class="icon-code"></i></a>
-                <pre class="signature" style="margin-right: 54px;">getWaitTime(\LiquidPlanner\type <span class="argument">$message</span>) : int</pre>
+                <pre class="signature" style="margin-right: 54px;">getWaitTime(string <span class="argument">$message</span>) : int</pre>
                 <p><em>Returns the wait time</em></p>
                 
 
                                     <h4>Parameters</h4>
                     <table class="table table-condensed table-hover">
                                                     <tr>
-                                <td>\LiquidPlanner\type</td>
+                                <td>string</td>
                                 <td>$message </td>
                                 <td></td>
                             </tr>
@@ -1602,7 +1602,7 @@ web service is returned so you can examine the result.</p>
                 <section class="span10 offset1">
                     <hr />
                     Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and authored
-                    on May 28th, 2014 at 12:10.
+                    on May 28th, 2014 at 15:36.
                 </section>
             </section>
         </section>

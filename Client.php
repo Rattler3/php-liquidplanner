@@ -55,9 +55,9 @@ class Client
     /**
      * Constructor
      * 
-     * @param type $workspaceID
-     * @param type $email
-     * @param type $password
+     * @param int $workspaceID
+     * @param string $email
+     * @param string $password
      */
     public function __construct($workspaceID, $email, $password)
     {
@@ -144,7 +144,7 @@ class Client
     /**
      * Reterives timesheet entries for a task
      *
-     * @param  type  $taskId
+     * @param  int  $taskId
      * @return array Response from Liquid Planner
      */
     public function taskTimesheetEntries($taskId=NULL)
@@ -236,7 +236,7 @@ class Client
      * Creates a note on a task in Liquid Planner
      *
      * @param array $data
-     * @param type  $taskid ID of Liquid Planer task to link to comment
+     * @param int  $taskid ID of Liquid Planer task to link to comment
      *
      * @return array Response from Liquid Planner
      */
@@ -253,7 +253,7 @@ class Client
      * Creates a link on a task in Liquid Planner
      *
      * @param array $data
-     * @param type  $taskid ID of Liquid Planer task to link to comment
+     * @param int  $taskid ID of Liquid Planer task to link to comment
      *
      * @return array Response from Liquid Planner
      */
@@ -476,7 +476,7 @@ class Client
      * Send data to the Liquid Planner API as a POST method with a JSON-encoded payload
      * 
      * @param string $url
-     * @param type $encodedTask
+     * @param string $encodedTask
      * @return array
      */
     private function post($url, $encodedTask)
@@ -622,7 +622,7 @@ class Client
 
     /**
      * Returns the throttle Message
-     * @param type $results
+     * @param array $results
      */
     private function throttleMessage($results)
     {
@@ -640,7 +640,7 @@ class Client
     /**
      * Returns the wait time
      * 
-     * @param type $message
+     * @param string $message
      * @return int
      */
     private function getWaitTime($message)
