@@ -11,7 +11,7 @@
  * password, and set a parent_id value of one of your existing
  * projects or project folders.
  */
-require_once '../liquidplanner.php';
+require_once '../Client.php';
 
 $task['name']        = "My LP ticket";
 $task['parent_id']   = 123456;
@@ -21,7 +21,7 @@ $task['description'] = "Description of my LP ticket";
 $lp = new LiquidPlanner("12345", "you@example.com", "yourLPpassword");
 
 /* Create a new task in Liquid Planner */
-$response = $lp->tasks_create($task);
+$response = $lp->tasksCreate($task);
 echo "ID of the new task: ".$response['id']."\n";
 
 exit;

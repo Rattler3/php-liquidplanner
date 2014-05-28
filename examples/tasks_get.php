@@ -11,10 +11,10 @@
  * password, and set a parent_id value of one of your existing
  * projects or project folders.
  */
-require_once '../liquidplanner.php';
+require_once '../Client.php';
 
 /* Create an instance of the Liquid Planner object */
-$lp = new LiquidPlanner("12345", "you@example.com", "yourLPpassword");
+$lp = new LiquidPlanner\Client("12345", "you@example.com", "yourLPpassword");
 
 /*
 	You can see what params are supported in the API guide

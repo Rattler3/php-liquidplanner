@@ -22,12 +22,15 @@
  * @version    2011-08-08
  */
 
-class LiquidPlanner
+namespace LiquidPlanner;
+
+class Client
 {
     private $email = '';
     private $password = '';
-    private $serviceurl = '';
-    public  $debug = false;
+    private $serviceUrl = '';
+    private $baseUrl;
+    public $debug = false;
 
     /**
      * Constructor
@@ -36,8 +39,8 @@ class LiquidPlanner
     {
         $this->email      = $email;
         $this->password   = $password;
-        $this->baseurl	  = "https://app.liquidplanner.com/api";
-        $this->serviceurl = $this->baseurl . "/workspaces/".$workspaceID;
+        $this->baseUrl	  = "https://app.liquidplanner.com/api";
+        $this->serviceUrl = $this->baseUrl . "/workspaces/".$workspaceID;
     }
 
     /**
@@ -47,51 +50,54 @@ class LiquidPlanner
      * will be deleted from the workspace. The raw response from the
      * web service is returned so you can examine the result.
      *
-     * @param  int     $clientId  the ID of the client in Liquid Planner
-     * @param  int     $commentId the ID of the comment in Liquid Planner
+     * @param int $clientId  the ID of the client in Liquid Planner
+     * @param int $commentId the ID of the comment in Liquid Planner
      *
-     * @return string  raw response from the API
+     * @return string raw response from the API
      *
      * @access public
      */
-    public function clients_comments_delete($clientId, $commentId)
+    public function clientsCommentsDelete($clientId, $commentId)
     {
-        $url = $this->serviceurl.'/clients/'.$clientId.'/comments/'.$commentId;
-        $response = $this->lp_delete($url);
+        $url = $this->serviceUrl.'/clients/'.$clientId.'/comments/'.$commentId;
+        $response = $this->delete($url);
+
         return($response);
     }
 
     /**
      * Retrieves the specified task or a list of all tasks
      *
-     * @param  int    $taskid ID of task.
+     * @param int $taskid ID of task.
      * @param  array  Parameters to send such as date and count limiters.
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function tasks($taskid=NULL, $params=array())
-    { 
-        $url = $this->serviceurl.'/tasks'.($taskid ? '/'.$taskid : '').($params ? '?'.http_build_query($params) : '');
-        $response = $this->lp_get($url);
-        return($response);    
+    {
+        $url = $this->serviceUrl.'/tasks'.($taskid ? '/'.$taskid : '').($params ? '?'.http_build_query($params) : '');
+        $response = $this->get($url);
+
+        return($response);
     }
-    
+
     /**
      * Retrieves timesheets optionally filtered by parameters.
      *
      * @param  array  Parameters to send such as date and count limiters.
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function timesheets($params=array())
-    { 
-        $url = $this->serviceurl.'/timesheets/'.($params ? '?'.http_build_query($params) : '');
-        $response = $this->lp_get($url);
-        return($response);    
+    {
+        $url = $this->serviceUrl.'/timesheets/'.($params ? '?'.http_build_query($params) : '');
+        $response = $this->get($url);
+
+        return($response);
     }
 
     /**
@@ -99,31 +105,47 @@ class LiquidPlanner
      *
      * @param  array  Parameters to send such as date and count limiters. Documentation here: http://www.liquidplanner.com/api-guide/technical-reference/filtering-timesheet-entries.html
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function timesheet_entries($timesheetid=NULL, $params=array())
-    { 
-        $url = $this->serviceurl.($timesheetid ? '/timesheets/'.$timesheetid : '').'/timesheet_entries'.($params ? '?'.http_build_query($params) : '');
-        $response = $this->lp_get($url);
-        return($response);    
+    public function timesheetEntries($timesheetid=NULL, $params=array())
+    {
+        $url = $this->serviceUrl.($timesheetid ? '/timesheets/'.$timesheetid : '').'/timesheet_entries'.($params ? '?'.http_build_query($params) : '');
+        $response = $this->get($url);
+
+        return($response);
+    }
+
+    /**
+     * Reterives timesheet entries for a task
+     *
+     * @param  type  $taskId
+     * @return array Response from Liquid Planner
+     */
+    public function taskTimesheetEntries($taskId=NULL)
+    {
+        $url = $this->serviceUrl.'/tasks/'.$taskId.'/timesheet_entries';
+        $response = $this->get($url);
+
+        return($response);
     }
 
     /**
      * Creates a new task in Liquid Planner
      *
-     * @param  array  $data   values to apply to the newly created task
+     * @param array $data values to apply to the newly created task
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function tasks_create(array $data)
+    public function tasksCreate(array $data)
     {
         $encodedTask = json_encode(array('task' => $data));
-        $url = $this->serviceurl.'/tasks';
-        $response = $this->lp_post($url, $encodedTask);
+        $url = $this->serviceUrl.'/tasks';
+        $response = $this->post($url, $encodedTask);
+
         return($response);
     }
 
@@ -134,157 +156,200 @@ class LiquidPlanner
      * will be deleted from the workspace. The raw response from the
      * web service is returned so you can examine the result.
      *
-     * @param  int     $id the ID of the task in Liquid Planner
+     * @param int $id the ID of the task in Liquid Planner
      *
-     * @return string  raw response from the API
+     * @return string raw response from the API
      *
      * @access public
      */
-    public function tasks_delete($id)
+    public function tasksDelete($id)
     {
-        $url = $this->serviceurl.'/tasks/'.$id;
-        $response = $this->lp_delete($url);
+        $url = $this->serviceUrl.'/tasks/'.$id;
+        $response = $this->delete($url);
+
         return($response);
     }
 
     /**
      * Updates task time values, such as work completed and estimates
      *
-     * @param  array  $data   values to apply to the specified task
-     * @param  int    $taskid ID of Liquid Planner task to update
+     * @param array $data   values to apply to the specified task
+     * @param int   $taskid ID of Liquid Planner task to update
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function tasks_track_time(array $data, $taskid)
+    public function tasksTrackTime(array $data, $taskid)
     {
         $encodedTask = json_encode($data);
-        $url = $this->serviceurl.'/tasks/'.$taskid.'/track_time';
-        $response = $this->lp_post($url, $encodedTask);
+        $url = $this->serviceUrl.'/tasks/'.$taskid.'/track_time';
+        $response = $this->post($url, $encodedTask);
+
         return($response);
     }
 
     /**
      * Creates a new comment on a task in Liquid Planner
      *
-     * @param  array  $data   values to apply to the newly created comment
-     * @param  int    $taskid ID of Liquid Planner task to link to comment
+     * @param array $data   values to apply to the newly created comment
+     * @param int   $taskid ID of Liquid Planner task to link to comment
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function tasks_comments_create(array $data, $taskid)
+    public function tasksCommentsCreate(array $data, $taskid)
     {
         $encodedData = json_encode(array('comment' => $data));
-        $url = $this->serviceurl.'/tasks/'.$taskid.'/comments';
-        $response = $this->lp_post($url, $encodedData);
+        $url = $this->serviceUrl.'/tasks/'.$taskid.'/comments';
+        $response = $this->post($url, $encodedData);
+
         return($response);
     }
-	
+
+    /**
+     * Creates a note on a task in Liquid Planner
+     *
+     * @param array $data
+     * @param type  $taskid ID of Liquid Planer task to link to comment
+     *
+     * @return array Response from Liquid Planner
+     */
+    public function tasksNoteCreate(array $data, $taskid)
+    {
+        $encodedData = json_encode(array('note' => $data));
+        $url = $this->serviceUrl.'/tasks/'.$taskid.'/note';
+        $response = $this->post($url, $encodedData);
+
+        return($response);
+    }
+
+    /**
+     * Creates a link on a task in Liquid Planner
+     *
+     * @param array $data
+     * @param type  $taskid ID of Liquid Planer task to link to comment
+     *
+     * @return array Response from Liquid Planner
+     */
+    public function tasksLinkCreate(array $data, $taskid)
+    {
+        $encodedData = json_encode(array('link' => $data));
+        $url = $this->serviceUrl.'/tasks/'.$taskid.'/links';
+        $response = $this->post($url, $encodedData);
+
+        return($response);
+    }
+
     /**
      * Retrieves the logged in user's account information.
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function account()
     {
-        $url = $this->baseurl.'/account';
-        $response = $this->lp_get($url);
-        return($response);    
+        $url = $this->baseUrl.'/account';
+        $response = $this->get($url);
+
+        return($response);
     }
 
     /**
      * Retrieves the current workspace details.
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function workspace()
     {
-        $url = $this->serviceurl;
-        $response = $this->lp_get($url);
-        return($response);    
+        $url = $this->serviceUrl;
+        $response = $this->get($url);
+
+        return($response);
     }
 
     /**
      * Retrieves the specified client or a list of clients
      *
-     * @param  int    $clientid ID of client.
+     * @param int $clientid ID of client.
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function clients($clientid=NULL)
-    { 
-		$url = $this->serviceurl.'/clients'.($clientid ? '/'.$clientid : '');
-        $response = $this->lp_get($url);
-        return($response);    
+    {
+        $url = $this->serviceUrl.'/clients'.($clientid ? '/'.$clientid : '');
+        $response = $this->get($url);
+
+        return($response);
     }
 
     /**
      * Creates a new client in Liquid Planner
      *
-     * @param  string  $name          name of this client
-     * @param  string  $description   plain-text description of the client
-     * @param  string  $external_ref  arbitrary string; use e.g. to store a reference ID from an external system
+     * @param string $name         name of this client
+     * @param string $description  plain-text description of the client
+     * @param string $external_ref arbitrary string; use e.g. to store a reference ID from an external system
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function clients_create($name, $description = '', $external_ref = '')
+    public function clientsCreate($name, $description = '', $external_ref = '')
     {
         $encodedClient = json_encode(array('client' => array(
-        	'name' => $name,
-        	'description' => $description,
-        	'external_reference' => $external_ref
+            'name' => $name,
+            'description' => $description,
+            'external_reference' => $external_ref
         )));
-        $url = $this->serviceurl.'/clients';
-        $response = $this->lp_post($url, $encodedClient);
+        $url = $this->serviceUrl.'/clients';
+        $response = $this->post($url, $encodedClient);
+
         return($response);
     }
 
     /**
      * Gets a list of comments on a client from Liquid Planner
      *
-     * @param  int    $clientid ID of Liquid Planner client to get comments from 
-     * @param  int    $commentid ID of Liquid Planner client comment to get 
+     * @param int $clientid  ID of Liquid Planner client to get comments from
+     * @param int $commentid ID of Liquid Planner client comment to get
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    function clients_comments($clientid=NULL, $commentid=NULL)
-    { 
-        $url = $this->serviceurl.'/clients/'.$clientid.'/comments'.($commentid ? '/'.$commentid : '');
+    public function clientsComments($clientid=NULL, $commentid=NULL)
+    {
+        $url = $this->serviceUrl.'/clients/'.$clientid.'/comments'.($commentid ? '/'.$commentid : '');
         echo $url;
-        return $this->lp_get($url);
+
+        return $this->get($url);
     }
 
     /**
      * Retrieves the specified member or a list of members
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function members($memberid=NULL)
     {
-        $url = $this->serviceurl.'/members'.($memberid? '/'.$memberid : '');
-        $response = $this->lp_get($url);
+        $url = $this->serviceUrl.'/members'.($memberid? '/'.$memberid : '');
+        $response = $this->get($url);
+
         return($response);
     }
 
     /**
      * Retrieves one member
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
@@ -296,87 +361,95 @@ class LiquidPlanner
     /**
      * Creates a new project in Liquid Planner
      *
-     * @param  string  $name          name of this project
-     * @param  int	   $client_id     client ID associated with project
-     * @param  int	   $parent_id     parent ID associated with project
-     * @param  string  $description   plain-text description of the project
-     * @param  bool    $is_done       whether the project is done or not
-     * @param  string  $done_on       date the project was done on
-     * @param  string  $external_reference       
+     * @param string $name               name of this project
+     * @param int    $client_id          client ID associated with project
+     * @param int    $parent_id          parent ID associated with project
+     * @param string $description        plain-text description of the project
+     * @param bool   $is_done            whether the project is done or not
+     * @param string $done_on            date the project was done on
+     * @param string $external_reference
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
-    public function projects_create($name, $client_id, $parent_id, $description = '', $is_done = false, $done_on = '', $external_reference = '')
+    public function projectsCreate($name, $client_id, $parent_id, $description = '', $is_done = false, $done_on = '', $external_reference = '')
     {
         $encodedClient = json_encode(array('project' => array(
-        	'name' => $name, 
-        	'client_id' => $client_id,
-        	'parent_id' => $parent_id,
-        	'description' => $description,
-        	'is_done' => $is_done,
-        	'done_on' => $done_on,
-        	'external_reference' => $external_reference
+            'name' => $name,
+            'client_id' => $client_id,
+            'parent_id' => $parent_id,
+            'description' => $description,
+            'is_done' => $is_done,
+            'done_on' => $done_on,
+            'external_reference' => $external_reference
         )));
-        $url = $this->serviceurl.'/projects';
-        $response = $this->lp_post($url, $encodedClient);
+        $url = $this->serviceUrl.'/projects';
+        $response = $this->post($url, $encodedClient);
+
         return($response);
     }
 
     /**
      * Retrieves the specified project or a list of projects
      *
-     * @param  int    $projectid ID of project
+     * @param int $projectid ID of project
      *
-     * @return array  Response from Liquid Planner
+     * @return array Response from Liquid Planner
      *
      * @access public
      */
     public function projects($projectid=NULL)
-    { 
-		$url = $this->serviceurl.'/projects'.($projectid ? '/'.$projectid : '');
-        $response = $this->lp_get($url);
-        return($response);    
-    }
+    {
+        $url = $this->serviceUrl.'/projects'.($projectid ? '/'.$projectid : '');
+        $response = $this->get($url);
 
-	/**
-     * Retrieves the specified activity or a list of activities
-     *
-     * @param  int    $activityid ID of activity.
-     *
-     * @return array  Response from Liquid Planner
-     *
-     * @access public
-     */
-	function activities($activityid=NULL)
-    {
-		$url = $this->serviceurl.'/activities'.($activityid ? '/'.$activityid : '');
-        $response = $this->lp_get($url);
-        return($response);    
-	}
-	
-	/**
-     * Creates a new activity in Liquid Planner
-     *
-     * @param  array  $data   Values to apply to the newly created activity
-     *
-     * @return array  Response from Liquid Planner
-     *
-     * @access public
-     */
-    public function activities_create(array $data)
-    {
-    	return array("Not yet implemented - expected soon");
-        $encodedActivity = json_encode(array('activity' => $data));
-        $url = $this->serviceurl.'/activities';
-        $response = $this->lp_post($url, $encodedActivity);
         return($response);
     }
 
-/**************************************************************/
+    /**
+     * Retrieves the specified activity or a list of activities
+     *
+     * @param int $activityid ID of activity.
+     *
+     * @return array Response from Liquid Planner
+     *
+     * @access public
+     */
+    public function activities($activityid=NULL)
+    {
+        $url = $this->serviceUrl.'/activities'.($activityid ? '/'.$activityid : '');
+        $response = $this->get($url);
 
-    function clients_dependencies(array $data, $id=NULL)
+        return($response);
+    }
+
+    /**
+     * Creates a new activity in Liquid Planner
+     * @todo
+     * @param array $data Values to apply to the newly created activity
+     *
+     * @return array Response from Liquid Planner
+     *
+     * @access public
+     */
+    public function activitiesCreate(array $data)
+    {
+        return array("Not yet implemented - expected soon");
+        $encodedActivity = json_encode(array('activity' => $data));
+        $url = $this->serviceUrl.'/activities';
+        $response = $this->post($url, $encodedActivity);
+
+        return($response);
+    }
+
+    /**
+     * @todo
+     * @param array $data
+     * @param type $id
+     * @return type
+     */
+    public function clientsDependencies(array $data, $id=NULL)
     { return array("Not yet implemented"); }
 
 /**************************************************************/
@@ -385,7 +458,7 @@ class LiquidPlanner
      * Send data to the Liquid Planner API as a POST method with a
      * JSON-encoded payload
      */
-    private function lp_post($url, $encodedTask)
+    private function post($url, $encodedTask)
     {
         /* Set up the CURL object and execute it */
         $conn = curl_init();
@@ -403,24 +476,24 @@ class LiquidPlanner
 
         /* The response is JSON, so decode it and return the result as an array */
         $results = json_decode($response, true);
-        
+
         /* Check for Throttling from the API */
-        if((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled"))
-        {
+        if ((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled")) {
             //We're being throttled. Wait the right amount of time and call it again.
-            $this->throttle_message($results);
-            sleep($this->get_wait_time($results['message']));
-            return $this->lp_post($url, $encodedTask);
+            $this->throttleMessage($results);
+            sleep($this->getWaitTime($results['message']));
+
+            return $this->post($url, $encodedTask);
         }
-        
+
         return $results;
     }
-    
+
     /**
      * Send data to the Liquid Planner API as a PUT method with a
      * JSON-encoded payload
      */
-    private function lp_put($url, $task)
+    private function put($url, $task)
     {
         /* Set up the CURL object and execute it */
         $conn = curl_init();
@@ -438,23 +511,23 @@ class LiquidPlanner
 
         /* The response is JSON, so decode it and return the result as an array */
         $results = json_decode($response, true);
-        
+
         /* Check for Throttling from the API */
-        if((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled"))
-        {
+        if ((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled")) {
             //We're being throttled. Wait the right amount of time and call it again.
-            $this->throttle_message($results);
-            sleep($this->get_wait_time($results['message']));
-            return $this->lp_put($url, $task);
+            $this->throttleMessage($results);
+            sleep($this->getWaitTime($results['message']));
+
+            return $this->put($url, $task);
         }
-        
+
         return $results;
     }
-    
-	 /**
+
+     /**
      * Send data to the Liquid Planner API as a GET method
      */
-    private function lp_get($url)
+    private function get($url)
     {
         /* Set up the CURL object and execute it */
         $conn = curl_init();
@@ -471,23 +544,23 @@ class LiquidPlanner
 
         /* The response is JSON, so decode it and return the result as an array */
         $results = json_decode($response, true);
-        
+
         /* Check for Throttling from the API */
-        if((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled"))
-        {
-        	//We're being throttled. Wait the right amount of time and call it again.
-			$this->throttle_message($results);
-            sleep($this->get_wait_time($results['message']));
-        	return $this->lp_get($url);
+        if ((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled")) {
+            //We're being throttled. Wait the right amount of time and call it again.
+            $this->throttleMessage($results);
+            sleep($this->getWaitTime($results['message']));
+
+            return $this->get($url);
         }
-        
+
         return $results;
     }
 
     /**
      * Send data to the Liquid Planner API as a DELETE method
      */
-    private function lp_delete($url)
+    private function delete($url)
     {
         /* Set up the CURL object and execute it */
         $conn = curl_init();
@@ -502,40 +575,39 @@ class LiquidPlanner
         curl_close($conn);
 
         $results = json_decode($response, true);
-        
+
         /* Check for Throttling from the API */
-        if((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled"))
-        {
-        	//We're being throttled. Wait the right amount of time and call it again.
-			$this->throttle_message($results);
-			sleep($this->get_wait_time($results['message']));
-        	return $this->lp_delete($url);
+        if ((isset($results['type']) && $results['type'] == "Error") && (isset($results['error']) && $results['error'] == "Throttled")) {
+            //We're being throttled. Wait the right amount of time and call it again.
+            $this->throttleMessage($results);
+            sleep($this->getWaitTime($results['message']));
+
+            return $this->delete($url);
         }
-        
+
         return $results;
     }
-    
-    private function throttle_message($results)
-    {
-		if($this->debug === true)
-		{
-			echo '<p class="throttled">API Throttling in effect. ' . $results['message'] . '</p>';
 
-			/* Clear the output buffer if it's turned on. */
-			if(ob_get_level() !== 0)
-			{
-		        ob_flush();
-		        flush();
-			}
-		}
+    private function throttleMessage($results)
+    {
+        if ($this->debug === true) {
+            echo '<p class="throttled">API Throttling in effect. ' . $results['message'] . '</p>';
+
+            /* Clear the output buffer if it's turned on. */
+            if (ob_get_level() !== 0) {
+                ob_flush();
+                flush();
+            }
+        }
     }
 
-    private function get_wait_time($message)
+    private function getWaitTime($message)
     {
         $regexp = "/Try again in ([0-9]{1,}) seconds/";
         preg_match($regexp, $message, $matches);
 
         if(is_numeric($matches[1]))
+
             return $matches[1] + 2;
         else
             return 15;

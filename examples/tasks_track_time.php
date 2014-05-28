@@ -11,16 +11,16 @@
  * email address, and Liquid Planner password, and set a task_id value
  * of one of your existing tasks.
  */
-require_once '../liquidplanner.php';
+require_once '../Client.php';
 
 $taskID                  = 123456;
 $taskData['work']        = "2";
 $taskData['activity_id'] = "12345";
 
 /* Create an instance of the Liquid Planner object */
-$lp = new LiquidPlanner("12345", "you@example.com", "yourLPpassword");
+$lp = new LiquidPlanner\Client("12345", "you@example.com", "yourLPpassword");
 
 /* Update time values for the specified task */
-$response = $lp->tasks_track_time($taskData, $taskID);
+$response = $lp->tasksTrackTime($taskData, $taskID);
 
 exit;
