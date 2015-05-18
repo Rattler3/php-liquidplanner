@@ -143,15 +143,15 @@ class Client
 
     /**
      * Reterives timesheet entries for a task
-     *
-     * @param  int  $taskId
-     * @return array Response from Liquid Planner
+     * 
+     * @param null $taskId
+     * @param array $params
+     * @return array 
      */
-    public function taskTimesheetEntries($taskId=NULL)
+    public function taskTimesheetEntries($taskId=NULL, $params=array())
     {
-        $url = $this->serviceUrl.'/tasks/'.$taskId.'/timesheet_entries';
+        $url = $this->serviceUrl.'/tasks/'.$taskId.'/timesheet_entries'.($params ? '?'.http_build_query($params) : '');
         $response = $this->get($url);
-
         return($response);
     }
 
